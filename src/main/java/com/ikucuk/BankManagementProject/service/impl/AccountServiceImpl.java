@@ -46,6 +46,7 @@ public class AccountServiceImpl implements IAccountService {
         accountRepository.save(createNewAccount(savedCustomer));
     }
 
+    //Req2:phoneNumber ile customer bilgilerini getirmek istiyoruz
     @Override
     public CustomerDto fetchAccount(String mobileNumber) {
 
@@ -53,19 +54,20 @@ public class AccountServiceImpl implements IAccountService {
                 () -> new ResourceNotFoundException("Customer","mobileNumber",mobileNumber));
 
         Account account = accountRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(
-                () -> new ResourceNotFoundException("Customer","mobileNumber",mobileNumber));
+                () -> new ResourceNotFoundException("Account","mobileNumber",mobileNumber));
 
-        //Req2:customer'ın account bilgilerini getirmek istiyoruz.(Hem customer hem de account bilgilerini getirmek istiyoruz)
+        //Req3:customer'ın account bilgilerini getirmek istiyoruz.(Hem customer hem de account bilgilerini getirmek istiyoruz)
         CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
         customerDto.setAccountDto(AccountMapper.mapToAccountDto(account, new AccountDto()));
 
         return customerDto;
     }
-
+    //Req3:kullanici hesap numarası hariç diğer tüm bilgileri güncelleyebilmelidir.
     @Override
     public boolean updateAccount(CustomerDto customerDto) {
 
         boolean isUpdated = false;
+        //farklı accountNo girdisi update etmek istenirse hata verir(accountNo update edilmemlidir.)
         AccountDto accountDto = customerDto.getAccountDto();
         if (accountDto != null) {
             Account account = accountRepository.findById(accountDto.getAccountNumber()).orElseThrow(
@@ -73,6 +75,7 @@ public class AccountServiceImpl implements IAccountService {
 
             Account accounts = AccountMapper.mapToAccountEntity(accountDto, account);
             Account savedAccount = accountRepository.save(accounts);
+
 
             Long customerId = accounts.getCustomerId();
             if(customerId != null){
@@ -86,6 +89,21 @@ public class AccountServiceImpl implements IAccountService {
         }
         return isUpdated;
     }
+
+    @Override
+    public boolean deleteAccount(String phoneNumber) {
+        boolean isValid = false;
+        Customer customer = customerRepository.findByMobileNumber(phoneNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Customer","mobileNumber",phoneNumber));
+
+        if(customer != null){
+            accountRepository.deleteByCustomerId(customer.getCustomerId());
+            customerRepository.deleteById(customer.getCustomerId());
+            isValid = true;
+        }
+        return isValid;
+    }
+
 
     private Account createNewAccount(Customer customer) {
         Account newAccount = new Account();
@@ -103,8 +121,6 @@ public class AccountServiceImpl implements IAccountService {
 
         return accountRepository.save(newAccount);
     }
-
-    //Req3:kullanici hesap numarası hariç diğer tüm bilgileri güncelleyebilmelidir.
 
 
 }
