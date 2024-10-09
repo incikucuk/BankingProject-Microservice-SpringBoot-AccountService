@@ -14,7 +14,8 @@ import org.hibernate.annotations.GenericGenerator;
 public class Customer extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")  //generator = "native" =>mevcut db destekledigi kimlik ve sıra sutunlarını kullanacak deme
+    //@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")  //generator = "native" =>mevcut db destekledigi kimlik ve sıra sutunlarını kullanacak deme
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
     private Long customerId;
 
