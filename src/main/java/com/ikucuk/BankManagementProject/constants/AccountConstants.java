@@ -1,5 +1,6 @@
 package com.ikucuk.BankManagementProject.constants;
 
+
 public class AccountConstants {
 
     private AccountConstants() {   //bu class erisim engellenmek istendiginden private yapildi
