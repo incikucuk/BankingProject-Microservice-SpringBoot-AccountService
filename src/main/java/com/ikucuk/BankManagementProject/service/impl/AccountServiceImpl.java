@@ -1,10 +1,13 @@
 package com.ikucuk.BankManagementProject.service.impl;
 
 import com.ikucuk.BankManagementProject.constants.AccountConstants;
+import com.ikucuk.BankManagementProject.dto.AccountDto;
 import com.ikucuk.BankManagementProject.dto.CustomerDto;
 import com.ikucuk.BankManagementProject.entity.Account;
 import com.ikucuk.BankManagementProject.entity.Customer;
 import com.ikucuk.BankManagementProject.exception.CustomerAlreadyExistsException;
+import com.ikucuk.BankManagementProject.exception.ResourceNotFoundException;
+import com.ikucuk.BankManagementProject.mapper.AccountMapper;
 import com.ikucuk.BankManagementProject.mapper.CustomerMapper;
 import com.ikucuk.BankManagementProject.repository.AccountRepository;
 import com.ikucuk.BankManagementProject.repository.CustomerRepository;
@@ -39,6 +42,22 @@ public class AccountServiceImpl implements IAccountService {
 
         Customer savedCustomer = customerRepository.save(customer);
         accountRepository.save(createNewAccount(savedCustomer));
+    }
+
+    @Override
+    public CustomerDto fetchAccount(String mobileNumber) {
+
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Customer","mobileNumber",mobileNumber));
+
+        Account account = accountRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(
+                () -> new ResourceNotFoundException("Customer","mobileNumber",mobileNumber));
+
+        //customer'ın account bilgilerini getirmek istiyoruz.(Hem customer hem de account bilgilerini getirmek istiyoruz)
+        CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
+        customerDto.setAccountDto(AccountMapper.mapToAccountDto(account, new AccountDto()));
+
+        return customerDto;
     }
 
     private Account createNewAccount(Customer customer) {

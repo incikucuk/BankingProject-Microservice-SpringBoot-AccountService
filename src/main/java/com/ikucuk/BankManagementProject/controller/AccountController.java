@@ -6,6 +6,7 @@ import com.ikucuk.BankManagementProject.dto.CustomerDto;
 import com.ikucuk.BankManagementProject.dto.ResponseDto;
 import com.ikucuk.BankManagementProject.service.IAccountService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,13 @@ public class AccountController {
         iAccountService.createAccount(customerDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto(AccountConstants.STATUS_201,AccountConstants.MESSAGE_201));
 
+    }
+
+    //phoneNumber gore account bilgilerini getir
+    @GetMapping("/fetch")
+    public ResponseEntity<CustomerDto> fetchAccountDetails(@RequestParam String phoneNumber){
+       CustomerDto customerDto =iAccountService.fetchAccount(phoneNumber);
+       return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }
   
 }
