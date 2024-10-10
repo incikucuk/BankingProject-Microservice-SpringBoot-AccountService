@@ -39,8 +39,8 @@ public class AccountServiceImpl implements IAccountService {
             throw new CustomerAlreadyExistsException("Customer already registered with given mobile number!"
                     +customer.getMobileNumber());
         }
-        customer.setCreatedAt(LocalDateTime.now());   //Kayit işleminde BaseEntityden de gelen, sadece create değerleri burada set edilmeli
-        customer.setCreatedBy("Anonymous");
+//        customer.setCreatedAt(LocalDateTime.now());   //Kayit işleminde BaseEntityden de gelen, sadece create değerleri burada set edilmeli
+//        customer.setCreatedBy("Anonymous");     //AuditAwareImpl class dahil edildiği icin artik burada kendimizin atamasina gerek kalmadi
 
         Customer savedCustomer = customerRepository.save(customer);
         accountRepository.save(createNewAccount(savedCustomer));
@@ -116,8 +116,8 @@ public class AccountServiceImpl implements IAccountService {
         newAccount.setAccountType(AccountConstants.SAVINGS);
         newAccount.setBranchAddress(AccountConstants.ADDRESS);
 
-        newAccount.setCreatedAt(LocalDateTime.now());
-        newAccount.setCreatedBy("Anonymous");
+//        newAccount.setCreatedAt(LocalDateTime.now());  //AuditAwareImpl class dahil edildiği icin artik burada kendimizin atamasina gerek kalmadi
+//        newAccount.setCreatedBy("Anonymous");
 
         return accountRepository.save(newAccount);
     }

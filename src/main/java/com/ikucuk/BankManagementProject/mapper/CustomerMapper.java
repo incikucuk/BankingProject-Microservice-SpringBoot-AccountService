@@ -1,8 +1,6 @@
 package com.ikucuk.BankManagementProject.mapper;
 
-import com.ikucuk.BankManagementProject.dto.AccountDto;
 import com.ikucuk.BankManagementProject.dto.CustomerDto;
-import com.ikucuk.BankManagementProject.entity.Account;
 import com.ikucuk.BankManagementProject.entity.Customer;
 
 public class CustomerMapper {

@@ -42,7 +42,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 //        List<ObjectError> errors = ex.getBindingResult().getAllErrors();
 //
 //        validationErrors.forEach((error) -> {
-//            String fieldName = (String)error.getField();
+//            String fieldName = (String)error.getField();   //gecersiz degerlerden dolayı gecici olarak kaldirildi.
 //            String message = error.getDefaultMessage();
 //            validationErrors.put(fieldName, message);
 //
